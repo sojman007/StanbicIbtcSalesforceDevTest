@@ -21,7 +21,7 @@ public class StudentRestService {
     }
 
     @HttpPost
-    public  static void CreateStudentRecord(UpdateStudentModel reqBody){
+    public  static void CreateStudentRecord(CreateStudentModel reqBody){
         RestResponse res = RestContext.response;
         if(reqBody != null){
             Student__c foundRecord = new Student__c();
@@ -32,7 +32,7 @@ public class StudentRestService {
             foundRecord.Class__c = String.isBlank(reqBody.studentClass) || reqBody.studentClass == null ? foundRecord.Class__c : reqBody.studentClass;
             
             try{
-                insert queryRes;
+                insert foundBody;
                 res.statusCode = 200;
                 res.responseBody = Blob.valueOf('Record updated successfully');
             
@@ -63,7 +63,7 @@ public class StudentRestService {
                 foundRecord.Class__c = String.isBlank(reqBody.studentClass) || reqBody.studentClass == null ? foundRecord.Class__c : reqBody.studentClass;
                 
                 try{
-                    update queryRes;
+                    update foundRecord;
                     res.statusCode = 200;
                     res.responseBody = Blob.valueOf('Record updated successfully');
                 
