@@ -1,4 +1,4 @@
-public with sharing class FetchStudentsRecordAuraController {
+public class FetchStudentsRecordAuraController {
     
     @AuraEnabled
     public static List<Student__c> FetchRecords(){
