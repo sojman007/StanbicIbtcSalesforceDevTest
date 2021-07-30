@@ -1,6 +1,7 @@
 import { LightningElement, wire, track } from 'lwc';
 import FetchRecords from '@salesforce/apex/FetchStudentsRecordAuraController.FetchRecords';
 import { subscribe, unsubscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import recordAdded from '@salesforce/messageChannel/recordAdded__c';
 // should automatically update when a new record is added
 
@@ -22,7 +23,8 @@ const columns = [
 
 export default class StudentsRecordTable extends LightningElement {
 
-    lmsSubscription;
+
+    lmsSubscription = undefined;
 
     @wire(MessageContext)
     messageContext;
@@ -37,11 +39,13 @@ export default class StudentsRecordTable extends LightningElement {
 
         });
 
-        if (this.lmsSubscription === null) {
+        if (this.lmsSubscription === undefined) {
+            console.log('subcribing to message!');
             this.lmsSubscription = subscribe(
                 this.messageContext,
                 recordAdded,
-                (message) => this.handleMessage(message)
+                (message) => this.handleMessage(message),
+                { scope: APPLICATION_SCOPE }
             );
 
         }
@@ -52,14 +56,20 @@ export default class StudentsRecordTable extends LightningElement {
     }
 
     disconnectedCallback() {
-
-
+        unsubscribe(this.lmsSubscription);
+        this.lmsSubscription = null;
     }
 
     handleMessage(message) {
-        console.log(message);
+        console.log('handling message');
         // 
-        console.log("refreshing data!!");
+        const evt = new ShowToastEvent({
+            title: 'Info',
+            variant: 'Info',
+            message: 'Refreshing Records'
+        });
+
+        this.dispatchEvent(evt);
         FetchRecords().then(res => {
             this.data = [...res];
         }).catch(err => {

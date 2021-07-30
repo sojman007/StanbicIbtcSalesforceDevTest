@@ -2,7 +2,7 @@ import { LightningElement, track, wire } from 'lwc';
 //import NavigationMixin from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { publish, MessageContext } from "lightning/messageService"
-import recordAdded from "@salesforce/messageChannels/recordAdded__c"
+import RECORD_ADDED from "@salesforce/messageChannel/recordAdded__c"
 import FIRST_NAME from "@salesforce/schema/Student__c.First_Name__c";
 import LAST_NAME from "@salesforce/schema/Student__c.Last_Name__c";
 import GENDER from "@salesforce/schema/Student__c.Gender__c";
@@ -33,12 +33,12 @@ export default class CreateStudentContainer extends LightningElement {
             variant: 'success',
             message: 'Student Created Successfully'
         });
+        const messagePayload = { recordId: "randomId" }
+        console.log('publishing message');
+        publish(this.messageContext, RECORD_ADDED, messagePayload);
+        console.log('published message');
 
         this.dispatchEvent(sucessEvt);
-
-        // publish message
-        const messagePayload = { recordId: "" }
-        publish(this.messageContext, recordAdded, payload);
     }
 
     handleGenderChange(e) {

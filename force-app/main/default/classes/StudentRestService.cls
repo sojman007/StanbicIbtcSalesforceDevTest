@@ -1,5 +1,5 @@
 @RestResource(urlmapping='/students')
-public class StudentRestService {
+global class StudentRestService {
 
 
 
@@ -9,19 +9,19 @@ public class StudentRestService {
      * @return   return description
      */ 
     @HttpGet
-    public static List<Student__c> GetAllStudentsOrGetStudentsById(){  
+    global static List<Student__c> GetAllStudentsOrGetStudentsById(){  
         RestRequest req = RestContext.Request;
 
         string query = 'Select Id, First_Name__c, Last_Name__c , Gender__c,State_Of_Origin__c From Student__c';
         if(req.requestBody != null) {
-            List<string> studentIds = Json.deserialize(req.requestBody.toString(), List<String>.class);
+            List<string> studentIds = (List<String>)Json.deserialize(req.requestBody.toString(), List<String>.class);
             query += 'Where Id IN :studentIds';
         }
-        return (List<Student__c>)Database.execute(query);
+        return (List<Student__c>)Database.query(query);
     }
 
     @HttpPost
-    public  static void CreateStudentRecord(CreateStudentModel reqBody){
+    global  static void CreateStudentRecord(CreateStudentModel reqBody){
         RestResponse res = RestContext.response;
         if(reqBody != null){
             Student__c foundRecord = new Student__c();
@@ -32,7 +32,7 @@ public class StudentRestService {
             foundRecord.Class__c = String.isBlank(reqBody.studentClass) || reqBody.studentClass == null ? foundRecord.Class__c : reqBody.studentClass;
             
             try{
-                insert foundBody;
+                insert foundRecord;
                 res.statusCode = 200;
                 res.responseBody = Blob.valueOf('Record updated successfully');
             
@@ -47,7 +47,7 @@ public class StudentRestService {
     
 
     @HttpPut
-    public  static void UpdateStudentRecord(UpdateStudentModel reqBody){
+    global  static void UpdateStudentRecord(UpdateStudentModel reqBody){
         RestResponse res = RestContext.response;
         if(reqBody != null){
             List<Student__c> queryRes = [Select First_Name__c, Last_Name__c , Gender__c , State_Of_Origin__c , Class__c 
@@ -82,14 +82,14 @@ public class StudentRestService {
 
 
     @HttpDelete
-    public static void DeleteRecords(){
+    global static void DeleteRecords(){
         RestRequest req = RestContext.Request;
         RestResponse res = RestContext.Response;
         string query = 'Select Id, First_Name__c, Last_Name__c , Gender__c,State_Of_Origin__c From Student__c';
         if(req.requestBody != null) {
-            List<string> studentIds = Json.deserialize(req.requestBody.toString(), List<String>.class);
+            List<string> studentIds = (List<string>) Json.deserialize(req.requestBody.toString(), List<String>.class);
             query += 'Where Id IN :studentIds';
-            List<Student__c> response = (List<Student__c>)Database.execute(query);
+            List<Student__c> response = (List<Student__c>)Database.query(query);
             delete response;
             res.statusCode = 204;
             res.responseBody = Blob.valueOf('Records Deleted Successfully');
