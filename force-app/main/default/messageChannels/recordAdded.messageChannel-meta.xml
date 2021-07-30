@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+
+    <masterLabel>recordAdded</masterLabel>
+
+    <isExposed>true</isExposed>
+    <description>A message channel for new students added to the database</description>
+
+    <lightningMessageFields>
+        <fieldName>recordId</fieldName>
+        <description> Id of newly added record </description>
+    </lightningMessageFields>
+</LightningMessageChannel>

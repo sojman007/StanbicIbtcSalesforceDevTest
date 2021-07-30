@@ -1,5 +1,7 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, wire, track } from 'lwc';
 import FetchRecords from '@salesforce/apex/FetchStudentsRecordAuraController.FetchRecords';
+import { subscribe, unsubscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
+import recordAdded from '@salesforce/messageChannel/recordAdded__c';
 // should automatically update when a new record is added
 
 const columns = [
@@ -20,7 +22,12 @@ const columns = [
 
 export default class StudentsRecordTable extends LightningElement {
 
+    lmsSubscription;
 
+    @wire(MessageContext)
+    messageContext;
+
+    @track
     data = [];
     columns = columns;
     connectedCallback() {
@@ -30,7 +37,38 @@ export default class StudentsRecordTable extends LightningElement {
 
         });
 
+        if (this.lmsSubscription === null) {
+            this.lmsSubscription = subscribe(
+                this.messageContext,
+                recordAdded,
+                (message) => this.handleMessage(message)
+            );
+
+        }
+
+
+
+
     }
+
+    disconnectedCallback() {
+
+
+    }
+
+    handleMessage(message) {
+        console.log(message);
+        // 
+        console.log("refreshing data!!");
+        FetchRecords().then(res => {
+            this.data = [...res];
+        }).catch(err => {
+
+        });
+    }
+
+
+
 
 
 }
