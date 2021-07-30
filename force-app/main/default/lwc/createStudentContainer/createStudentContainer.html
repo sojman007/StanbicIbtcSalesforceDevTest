@@ -1,0 +1,27 @@
+<template>
+    <div>
+        <lightning-card title="Create Student" icon-name="standard:account">
+            <div class="slds-var-p-around_medium">
+                <lightning-record-edit-form object-api-name="Student__c" onsuccess={handleSuccess}>
+                    <lightning-input-field field-name={firstName} class={fontClass}>
+                    </lightning-input-field>
+                    <lightning-input-field field-name={lastName} class={fontClass}>
+                    </lightning-input-field>
+                    <lightning-input-field field-name={state} class={fontClass}>
+                    </lightning-input-field>
+                    <lightning-input-field field-name={gender} class={fontClass} onchange={handleGenderChange}>
+                    </lightning-input-field>
+                    <lightning-input-field field-name={studentClass} class={fontClass}>
+                    </lightning-input-field>
+                    <div class="slds-var-m-top_medium">
+                        <lightning-button variant="brand" type="submit" name="save" label="Save">
+                        </lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+
+            </div>
+        </lightning-card>
+
+    </div>
+
+</template>

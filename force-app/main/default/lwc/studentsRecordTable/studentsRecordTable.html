@@ -1,0 +1,17 @@
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-card title="View Students" icon-name="standard:contact">
+
+        <!--sort and filter -->
+        <div class="slds-card__body slds-card__body_inner">
+            <lightning-layout class="slds-p-around_small">
+                <lightning-layout-item size="12">
+                    <lightning-datatable data={data} key-field="id" columns={columns}>
+                    </lightning-datatable>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+
+    </lightning-card>
+</template>
